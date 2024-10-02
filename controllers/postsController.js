@@ -4,8 +4,6 @@ const prisma = require("../db/queries");
 const getAllPosts = async (req, res) => {
   try {
     const user = req.user;
-
-    console.log(user);
     let posts;
     if (user && user.role === "ADMIN") {
       posts = await prisma.queryAllPosts();

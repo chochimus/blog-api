@@ -86,7 +86,16 @@ const login = (req, res) => {
   );
 };
 
+const logout = (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+  });
+  res.status(200).json({ message: "Logout successful" });
+};
+
 module.exports = {
   login,
   signup,
+  logout,
 };
