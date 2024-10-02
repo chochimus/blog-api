@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Comment {
-  id        String   @id
+  id        String   @id @default(uuid())
   text      String
   createdAt DateTime @default(now())
   userId    String
@@ -16,7 +16,7 @@ model Comment {
 }
 
 model Post {
-  id        String   @id
+  id        String   @id @default(uuid())
   title     String
   text      String
   published Boolean  @default(false)
@@ -26,7 +26,7 @@ model Post {
 }
 
 model User {
-  id       String    @id
+  id       String    @id @default(uuid())
   username String    @unique
   password String
   name     String?
