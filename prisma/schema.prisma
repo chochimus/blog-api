@@ -12,7 +12,9 @@ model Comment {
   text      String
   createdAt DateTime @default(now())
   userId    String
+  postId    String
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
 
 model Post {
@@ -23,6 +25,7 @@ model Post {
   createdAt DateTime @default(now())
   authorId  String
   User      User     @relation(fields: [authorId], references: [id])
+  Comment  Comment[]
 }
 
 model User {

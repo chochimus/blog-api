@@ -2,7 +2,7 @@ const { Router } = require("express");
 const postsController = require("../controllers/postsController");
 const postsRouter = Router();
 const commentsRouter = require("./comments");
-const passport = require("passport");
+
 const {
   authorizeRole,
   authenticateOptional,
@@ -23,6 +23,6 @@ postsRouter.delete(
   postsController.deletePost
 );
 
-postsRouter.use("/posts/:postid/comments", commentsRouter);
+postsRouter.use("/:postid/comments", commentsRouter);
 
 module.exports = postsRouter;

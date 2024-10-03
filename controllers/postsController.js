@@ -50,11 +50,16 @@ const createPost = [
   },
 ];
 
+//default to including the comments in request
+//Potentially need to set a max number of comments to receive here
+//so that if there were tons of comments it will only get the first
+//x or so and the rest can be further queried
 const getPostById = async (req, res) => {
   const { postid } = req.params;
+  const includeComments = req.query.includeComments === "false" ? false : true;
   try {
     const user = req.user;
-    const post = await prisma.queryPostsById(postid);
+    const post = await prisma.queryPostsById(postid, includeComments);
 
     if (!post.published) {
       if (!user || user.role !== "ADMIN") {

@@ -1,5 +1,6 @@
 const passport = require("passport");
 
+//If token is authenticated, user will be in req, otherwise null
 const authenticateOptional = (req, res, next) => {
   passport.authenticate("jwt", { session: false }, (err, user) => {
     if (err) {
@@ -10,6 +11,9 @@ const authenticateOptional = (req, res, next) => {
   })(req, res, next);
 };
 
+//authorizeRole(['ADMIN']) will ONLY allow listed roles on route, if
+//user doesn't have token 401, or if they have a token
+//but lack privilage they will get a 403
 const authorizeRole = (roles) => {
   return (req, res, next) => {
     // Authenticate the user

@@ -22,12 +22,38 @@ const queryAllPosts = async () => {
   }
 };
 
-const queryPostsById = async (id) => {
+const queryPostsById = async (id, include) => {
   try {
     return await prisma.post.findUnique({
       where: {
         id,
       },
+      include: {
+        Comment: include
+          ? {
+              include: {
+                User: {
+                  select: {
+                    username: true,
+                  },
+                },
+              },
+            }
+          : undefined,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const queryPostStatusById = async (id) => {
+  try {
+    return await prisma.post.findUnique({
+      where: {
+        id,
+      },
+      select: { published: true },
     });
   } catch (error) {
     throw error;
@@ -118,6 +144,74 @@ const createUser = async (username, password) => {
   }
 };
 
+const queryAllComments = async (postId) => {
+  try {
+    return await prisma.comment.findMany({
+      where: { postId },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const queryCommentAuthorId = async (id) => {
+  try {
+    return await prisma.comment.findUnique({
+      where: {
+        id,
+      },
+      select: { userId: true },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const queryCreateComment = async (text, userId, postId) => {
+  try {
+    return await prisma.comment.create({
+      data: {
+        text,
+        User: {
+          connect: { id: userId },
+        },
+        Post: {
+          connect: { id: postId },
+        },
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const queryUpdateComment = async (id, text) => {
+  try {
+    return await prisma.comment.update({
+      where: {
+        id,
+      },
+      data: {
+        text,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteCommentById = async (id) => {
+  try {
+    return await prisma.comment.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   queryAllPublishedPosts,
   queryAllPosts,
@@ -128,4 +222,10 @@ module.exports = {
   getUserById,
   getUserByUsername,
   createUser,
+  queryAllComments,
+  queryPostStatusById,
+  deleteCommentById,
+  queryCommentAuthorId,
+  queryCreateComment,
+  queryUpdateComment,
 };
